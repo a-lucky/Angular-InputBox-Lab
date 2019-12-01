@@ -19,24 +19,18 @@
 </button>
 
 <table>
-  <tr *ngFor="let rowKey of row">
-    <td *ngFor="let colKey of column">
+  <tr *ngFor="let rowKey of row; trackBy: trackBySelf">
+    <td *ngFor="let colKey of column; trackBy: trackBySelf">
       <div *ngIf="data.get(rowKey).get(colKey) as cellData">
-        <input
-          #inputCost
-          class="input-cost"
-          [value]="cellData.cost"
-          (focus)="onCostFocus(inputCost.value, cellData)"
-          (blur)="onCostBlur(inputCost.value, cellData)">
-        <input
-          #inputCurrency
-          class="input-currency"
-          [value]="cellData.currency"
-          (change)="onCurrencyChange(inputCurrency.value, cellData)"
+        <app-cellver1
+          [currencyList]="currencyList"
+          [currency2fractionSize]="currency2fractionSize"
+          [currency]="cellData.currency"
+          (changeCurrency)="cellData.currency=$event"
+          [cost]="cellData.cost"
+          (changeCost)="cellData.cost=$event"
           (focus)="onFocusCell(cellData)"
-          [class.error]="hasCurrnecyError(inputCurrency.value)"
-          autocomplete="on"
-          list="cur">
+        ></app-cellver1>
       </div>
     </td>
   </tr>

@@ -32,61 +32,40 @@ export class PullOutCellComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.data = new Map();
+    const newData = new Map();
     this.row.forEach( rowValue => {
       const colMap = new Map<number, CellData>();
-      this.data.set(rowValue, colMap);
+      newData.set(rowValue, colMap);
       this.column.forEach( colValue => {
         const cellData = new CellData();
-        cellData.cost = CommaChanger.addComma('99999.999');
+        cellData.cost = '99999.999';
         cellData.currency = 'JPY';
         colMap.set(colValue, cellData);
       });
-    })
+    });
+    this.data = newData;
   }
 
   resetData() {
     this.data.forEach( (colData, rowValue) => {
       colData.forEach( (cellData, colValue) => {
-        cellData.cost = CommaChanger.addComma('10000.000');
         cellData.currency = 'USD';
+        cellData.cost = '10000.000';
       });
     });
   }
 
-  onCostFocus(cost: string, cellData: CellData){
-    console.log('onCostFocus');
-    this.onFocusCell(cellData);
-    cellData.cost = CommaChanger.removeComma(cost);
-  }
-
-  onCostBlur(cost: string, cellData: CellData){
-    console.log('onCostFocus');
-    const fractionSize = this.currency2fractionSize[cellData.currency];
-    cellData.cost = CommaChanger.addComma(cost, fractionSize);
-  }
-
-  onCurrencyChange(currency: string, cellData: CellData) {
-    if (this.hasCurrnecyError(currency)) {
-      return;
-    }
-    cellData.currency = currency;
-
-    const fractionSize = this.currency2fractionSize[cellData.currency];
-    cellData.cost = CommaChanger.addComma(CommaChanger.removeComma(cellData.cost), fractionSize);
-  }
-
   onFocusCell(cellData: CellData) {
+    console.log('parent', 'onFocusCell');
     this.selectedCell = cellData;
   }
 
-  hasCurrnecyError(currency: string){
-    console.log('hasCurrnecyError');
-    return !this.currencyList.includes(currency);
+  lastUpdated():string{
+    return Date.now().toString().slice(0,10);
   }
 
-  lastUpdated():string{
-    return Date().toString();
+  trackBySelf(index, value){
+    return value;
   }
 
 }

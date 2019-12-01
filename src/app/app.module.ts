@@ -6,12 +6,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DefaultComponent } from './default/default.component';
 import { PullOutCellComponent } from './pull-out-cell/pull-out-cell.component';
+import { Cellver1Component } from './pull-out-cell/cellver1/cellver1.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DefaultComponent,
-    PullOutCellComponent
+    PullOutCellComponent,
+    Cellver1Component
   ],
   imports: [
     BrowserModule,

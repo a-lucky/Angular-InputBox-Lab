@@ -1,0 +1,21 @@
+<div>
+  <input
+    #inputCost
+    class="input-cost"
+    [value]="displayCellData.cost"
+    (change)="onCostChange(inputCost.value)"
+    (focus)="onCostFocus(inputCost.value)"
+    (blur)="onCostBlur(inputCost.value)">
+  <input
+    #inputCurrency
+    class="input-currency"
+    [value]="displayCellData.currency"
+    (change)="onCurrencyChange(inputCurrency.value)"
+    (focus)="onFocusCell()"
+    [class.error]="hasCurrnecyError(displayCellData.currency)"
+    autocomplete="on"
+    list="cur">
+</div>
+<!-- <div>
+  {{ lastUpdated() }}
+</div> -->
