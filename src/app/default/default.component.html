@@ -1,0 +1,43 @@
+<datalist id="cur">
+  <option *ngFor="let c of currencyList" [value]="c">
+</datalist>
+
+<div *ngIf="selectedCell; else noData">
+  {{ selectedCell.cost }}
+  {{ selectedCell.currency }}
+</div>
+<ng-template #noData>
+  <div>no data</div>
+</ng-template>
+
+<div>
+  {{ lastUpdated() }}
+</div>
+
+<button (click)="resetData()">
+  Reset
+</button>
+
+<table>
+  <tr *ngFor="let rowKey of row">
+    <td *ngFor="let colKey of column">
+      <div *ngIf="data.get(rowKey).get(colKey) as cellData">
+        <input
+          #inputCost 
+          class="input-cost"
+          [ngModel]="cellData.cost" 
+          (focus)="onCostFocus(inputCost.value, cellData)"
+          (blur)="onCostBlur(inputCost.value, cellData)">
+        <input
+          #inputCurrency
+          class="input-currency"
+          [value]="cellData.currency"
+          (change)="onCurrencyChange(inputCurrency.value, cellData)"
+          (focus)="onFocusCell(cellData)"
+          [class.error]="hasCurrnecyError(inputCurrency.value)"
+          autocomplete="on" list="cur">
+      </div> 
+    </td>
+  </tr>
+</table>
+
