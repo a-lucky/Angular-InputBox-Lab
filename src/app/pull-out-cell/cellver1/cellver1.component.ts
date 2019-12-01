@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, ElementRef, ViewChild, NgZone, Renderer2, AfterViewInit } from '@angular/core';
 import { CellData } from 'src/app/CellData';
 import { CommaChanger } from 'src/app/CommnaChanger';
+import { fromEvent } from 'rxjs';
 
 @Component({
   selector: 'app-cellver1',
@@ -8,7 +9,7 @@ import { CommaChanger } from 'src/app/CommnaChanger';
   styleUrls: ['./cellver1.component.less'],
   changeDetection:ChangeDetectionStrategy.OnPush
 })
-export class Cellver1Component implements OnInit {
+export class Cellver1Component implements OnInit, AfterViewInit  {
 
   @Input() currencyList;
   @Input() currency2fractionSize;
@@ -35,9 +36,47 @@ export class Cellver1Component implements OnInit {
   @Output() changeCurrency: EventEmitter<string>  = new EventEmitter();
   @Output() focus: EventEmitter<null>  = new EventEmitter();
 
-  constructor() { }
+  @ViewChild('inputCost', {static: false}) inputCost: ElementRef;
+
+  constructor(private _zone: NgZone,
+    private renderer: Renderer2) { }
 
   ngOnInit() {
+  }
+
+
+  ngAfterViewInit() {
+    this._zone.runOutsideAngular(() => {
+      fromEvent(this.inputCost.nativeElement, 'change')
+      .subscribe(
+        (e: Event) => {
+          console.log('change');
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          this.onCostChange(this.inputCost.nativeElement.value);
+        }
+      );
+      fromEvent(this.inputCost.nativeElement, 'focus')
+      .subscribe(
+        (e: FocusEvent) => {
+          console.log('focus');
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          this.onCostFocus(this.inputCost.nativeElement.value);
+          this.renderer.setProperty(this.inputCost.nativeElement, 'value', this.displayCellData.cost);
+        }
+      );
+      fromEvent(this.inputCost.nativeElement, 'blur')
+      .subscribe(
+        (e: FocusEvent) => {
+          console.log('blur');
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          this.onCostBlur(this.inputCost.nativeElement.value);
+          this.renderer.setProperty(this.inputCost.nativeElement, 'value', this.displayCellData.cost);
+        }
+      );
+    });
   }
 
   onCostChange(cost: string) {
@@ -77,7 +116,9 @@ export class Cellver1Component implements OnInit {
 
   onFocusCell() {
     console.log('onFocusCell');
-    this.focus.emit();
+    this._zone.run(() => {
+      this.focus.emit();
+    });
   }
 
   hasCurrnecyError(currency: string){

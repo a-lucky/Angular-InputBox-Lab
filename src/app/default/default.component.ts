@@ -9,8 +9,8 @@ import { CommaChanger } from '../CommnaChanger';
 })
 export class DefaultComponent implements OnInit {
 
-  column = [...Array(14).keys()];
-  row = [...Array(70).keys()];
+  column = [...Array(50).keys()];
+  row = [...Array(100).keys()];
   currencyList: string[] = ['JPY', 'USD'];
   currency2fractionSize = {
     'JPY': 2,

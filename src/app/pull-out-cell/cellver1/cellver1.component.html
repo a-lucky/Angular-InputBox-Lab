@@ -2,10 +2,14 @@
   <input
     #inputCost
     class="input-cost"
+    [value]="displayCellData.cost">
+  <!-- <input
+    #inputCost
+    class="input-cost"
     [value]="displayCellData.cost"
     (change)="onCostChange(inputCost.value)"
     (focus)="onCostFocus(inputCost.value)"
-    (blur)="onCostBlur(inputCost.value)">
+    (blur)="onCostBlur(inputCost.value)"> -->
   <input
     #inputCurrency
     class="input-currency"
